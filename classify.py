@@ -238,11 +238,11 @@ def main(task='rte',
 
 
 if __name__ == '__main__':
-    main(task='rte',train_cfg='config/train_rte.json',model_cfg='config/bert_base.json',model_file='./exp/rte/model_steps_100.pt',pretrain_file=None,data_parallel=True,vocab='./uncased_L-12_H-768_A-12/vocab.txt',save_dir='./exp/rte',max_len=128,
-         data_file='./RTE/dev.csv',
+    main(task='rte',train_cfg='config/train_rte.json',model_cfg='config/bert_base.json',model_file='../exp/rte/model_steps_100.pt',pretrain_file=None,data_parallel=True,vocab='../uncased_L-12_H-768_A-12/vocab.txt',save_dir='../exp/rte',max_len=128,
+         data_file='../RTE/dev.csv',
          mode='eval')
-    #main(task='rte',train_cfg='config/train_rte.json',model_cfg='config/bert_base.json',model_file='./exp/rte/model_steps_232.pt',pretrain_file=None,data_parallel=True,vocab='./uncased_L-12_H-768_A-12/vocab.txt',save_dir='./exp/rte',max_len=128,
-    #     data_file='./RTE/train.csv',
+    #main(task='rte',train_cfg='config/train_rte.json',model_cfg='config/bert_base.json',model_file='../exp/rte/model_steps_232.pt',pretrain_file=None,data_parallel=True,vocab='../uncased_L-12_H-768_A-12/vocab.txt',save_dir='../exp/rte',max_len=128,
+    #     data_file='../RTE/train.csv',
     #     mode='train')
     
     #fire.Fire(main)
