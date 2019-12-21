@@ -67,10 +67,20 @@ class MNLI(CsvDataset):
         for line in itertools.islice(lines, 1, None): # skip header
             yield line[-1], line[8], line[9] # label, text_a, text_b
 
+class RTE(CsvDataset):
+    """ Dataset class for RTE """
+    labels = ("not_entailment", "entailment") # label names
+    def __init__(self, file, pipeline=[]):
+        super().__init__(file, pipeline)
+
+    def get_instances(self, lines):
+        for line in itertools.islice(lines, 1, None): # skip header
+            yield line[-1], line[1], line[2] # label, text_a, text_b
+
 
 def dataset_class(task):
     """ Mapping from task string to Dataset Class """
-    table = {'mrpc': MRPC, 'mnli': MNLI}
+    table = {'mrpc': MRPC, 'mnli': MNLI, 'rte':RTE}
     return table[task]
 
 
@@ -169,17 +179,17 @@ class Classifier(nn.Module):
 #pretrain_file='../uncased_L-12_H-768_A-12/bert_model.ckpt',
 #pretrain_file='../exp/bert/pretrain_100k/model_epoch_3_steps_9732.pt',
 
-def main(task='mrpc',
-         train_cfg='config/train_mrpc.json',
+def main(task='rte',
+         train_cfg='config/train_rte.json',
          model_cfg='config/bert_base.json',
-         data_file='../glue/MRPC/train.tsv',
-         model_file=None,
-         pretrain_file='../uncased_L-12_H-768_A-12/bert_model.ckpt',
+         data_file='./RTE/dev.csv',
+         model_file='./exp/rte/model_steps_232.pt',
+         pretrain_file='./uncased_L-12_H-768_A-12/bert_model.ckpt',
          data_parallel=True,
-         vocab='../uncased_L-12_H-768_A-12/vocab.txt',
-         save_dir='../exp/bert/mrpc',
+         vocab='./uncased_L-12_H-768_A-12/vocab.txt',
+         save_dir='./exp/rte',
          max_len=128,
-         mode='train'):
+         mode='eval'):
 
     cfg = train.Config.from_json(train_cfg)
     model_cfg = models.Config.from_json(model_cfg)
@@ -228,4 +238,11 @@ def main(task='mrpc',
 
 
 if __name__ == '__main__':
-    fire.Fire(main)
+    main(task='rte',train_cfg='config/train_rte.json',model_cfg='config/bert_base.json',model_file='./exp/rte/model_steps_100.pt',pretrain_file=None,data_parallel=True,vocab='./uncased_L-12_H-768_A-12/vocab.txt',save_dir='./exp/rte',max_len=128,
+         data_file='./RTE/dev.csv',
+         mode='eval')
+    #main(task='rte',train_cfg='config/train_rte.json',model_cfg='config/bert_base.json',model_file='./exp/rte/model_steps_232.pt',pretrain_file=None,data_parallel=True,vocab='./uncased_L-12_H-768_A-12/vocab.txt',save_dir='./exp/rte',max_len=128,
+    #     data_file='./RTE/train.csv',
+    #     mode='train')
+    
+    #fire.Fire(main)
